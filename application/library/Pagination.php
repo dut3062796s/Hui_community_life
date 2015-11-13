@@ -10,7 +10,7 @@
  *  and "last page" links - as outlined in an article by Faruk Ates from 2007, which can now be found
  *  {@link https://gist.github.com/622561 here}), can generate links both in natural as well as in reverse order, can be
  *  easily, localized, supports different positions for next/previous page buttons, supports page propagation via GET or
- *  via URL rewriting, is SEO-friendly, and the appearance is easily customizable through CSS.
+ *  via URL rewriting, is SEO-friendly, and the appearance is easily customizable through css.
  *
  *  Please note that this is a *generic* pagination script, meaning that it does not display any records and it does not
  *  have any dependencies on database connections or SQL queries, making it very flexible! It is up to the developer to
@@ -508,7 +508,7 @@ class Pagination
     /**
      *  Generates the output.
      *
-     *  <i>Make sure your script references the CSS file!</i>
+     *  <i>Make sure your script references the css file!</i>
      *
      *  <code>
      *  //  generate output but don't echo it
