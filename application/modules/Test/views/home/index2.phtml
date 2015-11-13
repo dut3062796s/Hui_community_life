@@ -1,0 +1,196 @@
+<script src="/public/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+<div id="shux">
+</div>
+<style>
+    .pagination > a.active, .pagination > a.active :focus, .pagination > a.active :hover {
+        z-index: 2;
+        color: #fff;
+        cursor: default;
+        background-color: #337ab7;
+        border-color: #337ab7;
+    }
+
+    .pagination > a, .pagination > span {
+        position: relative;
+        float: left;
+        padding: 6px 12px;
+        margin-left: -1px;
+        line-height: 1.42857143;
+        color: #337ab7;
+        text-decoration: none;
+        background-color: #fff;
+        border: 1px solid #ddd;
+    }
+
+    .pagination > a.disabled, .pagination > a.disabled :focus, .pagination > a.disabled :hover {
+        color: #777;
+        cursor: not-allowed;
+        background-color: #fff;
+        border-color: #ddd;
+    }
+</style>
+<a href="javascript:void(0);" onclick="Edit('')"><i class="icon-pencil"></i>添加</a>
+<table class="table">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>字段1</th>
+        <th>字段2</th>
+        <th style="width: 26px;">操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php foreach ($content as $item) { ?>
+        <tr>
+            <td><?php echo $item->test_id; ?></td>
+            <td><?php echo $item->testcol1; ?></td>
+            <td><?php echo $item->testcol2; ?></td>
+            <td>
+                <a href="javascript:void(0);" onclick="Edit(<?php echo $item->test_id; ?>)"><i
+                        class="icon-pencil"></i>修改</a>
+                <a href="javascript:void(0);" onclick="Delete(<?php echo $item->test_id; ?>)"><i
+                        class="icon-remove"></i>删除</a>
+            </td>
+        </tr>
+    <?php } ?>
+    </tbody>
+
+</table>
+<div class="pagination">
+<!--    --><?php //echo $pageindex ?>
+    <a href="javascript:void(0);" data-index="1" id="onpage"><i class="icon-pencil"></i>上一页</a>
+    <?php for ($i = 0; $i < ceil($Count / $pagesize); $i++) { ?>
+        <a href="javascript:void(0);" <?php echo $pageindex == $i + 1 ? "class=active" : "" ?>
+           data-index="<?php echo $i + 1 ?>"><i class="icon-pencil"></i><?php echo $i + 1 ?></a>
+    <?php } ?>
+    <a href="javascript:void(0);" data-index="<?php echo ceil($Count / $pagesize) ?>" id="nextpage"><i
+            class="icon-pencil"></i>下一页</a>
+
+    <p>共<span id="count"><?php echo $Count ?></span>条记录，当前是<span id="pagenum"><?php echo $pageindex ?></span>页</p>
+</div>
+<script type="text/javascript">
+    $(function(){
+        if($("#pagenum").text()=="1")
+        {
+            $("#onpage").attr("href","");
+            $("#onpage").addClass("disabled");
+        }
+    });
+    function Delete(id) {
+        if (confirm('您是否确定删除？')) {
+            $.ajax({
+                url: '/Test/home/delete/',
+                type: 'POST',
+                data: {
+                    id: id
+                },
+                dataType: 'json',
+                success: function (msg) {
+                    if(msg.errno==0){
+                        alert(msg.errmsg);
+                        setTimeout(function(){
+                            $("#shux").load("/Test/Home/index");
+                        },1000);
+                        //window.location.href="/Test/home/index";
+                    }else{
+                        alert(msg.errmsg);
+                    }
+
+                },
+                error:function()
+                {
+                    alert("Error");
+                }
+            })
+        }
+    }
+    function Edit(id) {
+        location.href = '/Test/Home/edit/id/' + id;
+    }
+    /*分页*/
+    $(".pagination a").on("click", function () {
+        //下一页
+        if ($(this).attr("id") == "nextpage") {
+            //var index= ;
+            var index = parseInt($(".active").attr("data-index"))+1;
+            if (index < $(this).attr("data-index")) {
+                //$(this).attr("href","javascript:void(0);");
+                //$(this).addClass("disabled");
+                $("#shux").load("/Test/Home/index2/pageindex/" + index,function(){
+                    $("#onpage").attr("href", "javascript:void(0);");
+                    $("#onpage").removeClass("disabled");
+                });
+            } else if (index == $(this).attr("data-index")) {
+                $("#shux").load("/Test/Home/index2/pageindex/" + index,function(){
+                    $("#onpage").attr("href", "javascript:void(0);");
+                    $("#onpage").removeClass("disabled");
+                    $("#nextpage").attr("href", "");
+                    $("#nextpage").addClass("disabled");
+                });
+
+            }
+            else {
+                $("#onpage").attr("href", "javascript:void(0);");
+                $("#onpage").removeClass("disabled");
+                $(this).attr("href", "");
+                $(this).addClass("disabled");
+            }
+            //return false;
+            event.preventDefault();  //关键是这句
+        } else if ($(this).attr("id") == "onpage")//上一页
+        {
+            var index = parseInt($(".active").attr("data-index")) - 1;
+            if (index < $(this).attr("data-index")) {
+                $(this).attr("href", "");
+                $(this).addClass("disabled");
+                //return false;
+
+            } else if (index == $(this).attr("data-index")) {
+                $("#shux").load("/Test/Home/index2/pageindex/" + index,function(){
+                    $("#nextpage").attr("href", "javascript:void(0);");
+                    $("#nextpage").removeClass("disabled");
+                    $("#onpage").attr("href", "");
+                    $("#onpage").addClass("disabled");
+                });
+
+            }
+            else {
+                $("#shux").load("/Test/Home/index2/pageindex/" + index,function(){
+                    $("#nextpage").attr("href", "javascript:void(0);");
+                    $("#nextpage").removeClass("disabled");
+                    $("#onpage").attr("href", "javascript:void(0);");
+                    $("#onpage").removeClass("disabled");
+                });
+
+            }
+            event.preventDefault();  //关键是这句
+        } else {
+            var index = $(this).attr("data-index");
+
+            //$(this).attr("data-index",index-1);
+            //$("#nextpage").attr("data-index",$("#nextpage").attr("data-index")+1);
+
+            $("#shux").load("/Test/Home/index2/pageindex/" + index,function(){
+                if (index == $("#nextpage").attr("data-index")) {
+                    $("#nextpage").attr("href", "");
+                    $("#nextpage").addClass("disabled");
+                    $("#onpage").attr("href", "javascript:void(0);");
+                    $("#onpage").removeClass("disabled");
+                } else if (index == $("#onpage").attr("data-index")) {
+                    $("#nextpage").attr("href", "javascript:void(0);");
+                    $("#nextpage").removeClass("disabled");
+                    $("#onpage").attr("href", "");
+                    $("#onpage").addClass("disabled");
+
+                } else {
+
+                }
+                $("#pagenum").text(index);
+            });
+            event.preventDefault();  //关键是这句
+        }
+    });
+
+</script>
+
+

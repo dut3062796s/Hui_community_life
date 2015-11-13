@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>测试</title>
+    <script src="/public/js/jquery-1.10.2.min.js" type="text/javascript"></script>
+</head>
+<body>
+<form id="tab">
+    <label>字段1</label>
+<!--    <input type="text" name="testcol1" id="testcol1" value="--><?php //echo $Test==''?'': $item->testcol1;?><!--"/>-->
+    <input type="text" name="testcol1" id="testcol1" value="<?php echo $Test==''?'': $Test->testcol1;?>"/>
+    <label>字段2</label>
+    <input type="text" name="testcol2" id="testcol2" value="<?php echo $Test==''?'': $Test->testcol2;?>"/>
+    <?php
+    if ($Test == '') {
+        ?>
+        <label>添加个数</label>
+        <input type="number" name="testcol3" id="testcol3" value="1"/>
+    <?php } ?>
+
+    <input type="hidden" name="test_id" id="test_id" value="<?php echo $Test==''?'': $Test->test_id;?>"/>
+
+    <input type="submit" name="" id="sure" value="确定">
+    <a href="javascript:void(0);" id="balck">列表</a>
+</form>
+<script type="text/javascript">
+    $(function(){
+        $("#balck").click(function(){
+            window.location="/Test/Home/Index";
+        });
+        $('#sure').click(function(){
+            if($("#testcol1").val()=="" || $("#testcol2").val()=="")
+            {
+                alert("testcol1或testcol2不能为空！");
+                event.preventDefault();  //关键是这句
+            }else
+            {
+                $.ajax({
+                    url:'/Test/home/editdo/id/'+$("#test_id").val(),
+                    type:'POST',
+                    data:$('#tab').serialize(),
+//                data:{
+//                    id:$("#id").val(),
+//                    username:$("#username").val(),
+//                    password:$("#password").val(),
+//                    repassword:$("#repassword").val(),
+//                    nickname:$("#nickname").val(),
+//                    realname:$("#realname").val(),
+//                    email:$("#email").val()
+//                },
+                    dataType:'json',
+                    success:function(msg){
+                        if(msg.errno==0){
+                            alert(msg.errmsg);
+                            setTimeout(function(){
+                                location.reload();
+                            },1000);
+                            //window.location.href="/Test/home/index";
+                        }else{
+                            alert(msg.errmsg);
+                        }
+                    },
+                    error:function()
+                    {
+                        alert("Error");
+                    }
+                })
+                event.preventDefault();  //关键是这句
+            }
+
+        })
+    })
+</script>
+</body>
+</html>
