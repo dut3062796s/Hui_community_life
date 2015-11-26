@@ -2,10 +2,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="renderer" content="webkit">
 <meta http-equiv="Cache-Control" content="no-siteapp" />
-<title><?php echo $title;?></title>
+<title><?php if (isset($title)) {echo $title;}else{ echo ""; }?></title>
 
-<meta name="keywords" content="<?php echo $keywords;?>">
-<meta name="description" content="<?php echo $description;?>">
+<meta name="keywords" content="<?php if (isset($keywords)) {echo $keywords;}else{ echo ""; }?>">
+<meta name="description" content="<?php if (isset($description)) {echo $description;}else{ echo ""; }?>">
 
 <!--[if lt IE 8]>
 <meta http-equiv="refresh" content="0;ie.html" />
