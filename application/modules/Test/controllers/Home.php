@@ -5,13 +5,8 @@
  * @desc 默认控制器
  * @see http://www.php.net/manual/en/class.yaf-controller-abstract.php
  */
-class HomeController extends Yaf_Controller_Abstract {
+class HomeController extends Base {
 	public function init(){
-		$this->_config = Yaf_Registry::get('config');
-		$this->_req = $this->getRequest();
-		$this->_session = Yaf_Session::getInstance();
-		$this->_session->start();
-		$this->_base = new base();
 		$this->_model =new Test1Model();
 //		if(!$this->_session->has('username')){
 //			$this->redirect('/index/');
@@ -87,8 +82,8 @@ class HomeController extends Yaf_Controller_Abstract {
 	 * @return bool
 	 */
 	public function editdoAction($id) {
-		if ($this->_req->isXmlHttpRequest()) {
-			$Posts = $this->_req->getPost();
+		if ($this->_request->isXmlHttpRequest()) {
+			$Posts = $this->_request->getPost();
 			if (empty($id)) {
 				if($Posts['testcol3']>1)
 				{
@@ -102,18 +97,18 @@ class HomeController extends Yaf_Controller_Abstract {
 					}
 					if($batch)
 					{
-						$this->_base->show_json(array('errno'=>0,'errmsg'=>'添加成功!'));
+						$this->show_json(array('errno'=>0,'errmsg'=>'添加成功!'));
 					}else{
-						$this->_base->show_json(array('errno'=>1,'errmsg'=>'添加失败!'));
+						$this->show_json(array('errno'=>1,'errmsg'=>'添加失败!'));
 					}
 				}else{
 					$params =  array('testcol1'=>$Posts['testcol1'],'testcol2'=>$Posts['testcol2']);
 					if($this->_model->Create($params))
 					{
-						$this->_base->show_json(array('errno'=>0,'errmsg'=>'添加成功!'));
+						$this->show_json(array('errno'=>0,'errmsg'=>'添加成功!'));
 					}else
 					{
-						$this->_base->show_json(array('errno'=>1,'errmsg'=>'添加失败!'));
+						$this->show_json(array('errno'=>1,'errmsg'=>'添加失败!'));
 					}
 				}
 			}else
@@ -123,10 +118,10 @@ class HomeController extends Yaf_Controller_Abstract {
 				$where=array("test_id"=>$id);//多条件
 				if($this->_model->Update($params,$where))
 				{
-					$this->_base->show_json(array('errno'=>0,'errmsg'=>'修改成功!'));
+					$this->show_json(array('errno'=>0,'errmsg'=>'修改成功!'));
 				}else
 				{
-					$this->_base->show_json(array('errno'=>1,'errmsg'=>'修改失败!'));
+					$this->show_json(array('errno'=>1,'errmsg'=>'修改失败!'));
 				}
 			}
 		}
@@ -140,15 +135,15 @@ class HomeController extends Yaf_Controller_Abstract {
 	 */
 	public function deleteAction()
 	{
-		if ($this->_req->isXmlHttpRequest()) {
-			$Posts = $this->_req->getPost();
+		if ($this->_request->isXmlHttpRequest()) {
+			$Posts = $this->_request->getPost();
 			if (!empty($Posts["id"])) {
 				if($this->_model->Delete(array("test_id"=>$Posts["id"])))
 				{
-					$this->_base->show_json(array('errno'=>0,'errmsg'=>'删除成功!'));
+					$this->show_json(array('errno'=>0,'errmsg'=>'删除成功!'));
 				}else
 				{
-					$this->_base->show_json(array('errno'=>1,'errmsg'=>'删除失败!'));
+					$this->show_json(array('errno'=>1,'errmsg'=>'删除失败!'));
 				}
 			}
 		}

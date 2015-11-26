@@ -5,12 +5,8 @@
  * @desc 默认控制器
  * @see http://www.php.net/manual/en/class.yaf-controller-abstract.php
  */
-class HomeController extends AdminBase {
-	public function init(){
-//		if(!$this->_session->has('username')){
-//			$this->redirect('/index/');
-//		}
-	}
+class Home1Controller extends Yaf_Controller_Abstract {
+
 	/** 
      * 默认动作
      * Yaf支持直接把Yaf_Request_Abstract::getParam()得到的同名参数作为Action的形参
@@ -26,9 +22,6 @@ class HomeController extends AdminBase {
 		//3. assign
 		$this->getView()->assign("content", "Admin登录");
 		$this->getView()->assign("name", "AdminName登录");
-		//$this->getView()->assign("title", "H+ 后台主题UI框架 - 主页");
-		//$this->getView()->assign("keywords", "H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台");
-		$this->getView()->assign("description", "H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术");
 		//在控制器里手动调用的方式有2种
 		//$this->display('hello');
 		//$this->getView()->display('test/world.phtml');
